@@ -98,6 +98,7 @@ class InstallSchema implements InstallSchemaInterface
     protected function getMagentoType($type) {
 
         $mageType = ['smallint'=>'TYPE_SMALLINT',
+        'int'=>'TYPE_INTEGER',
         'varchar'=>'TYPE_TEXT',
         'text'=>'TYPE_TEXT',
         'decimal'=>'TYPE_DECIMAL',

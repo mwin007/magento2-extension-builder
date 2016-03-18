@@ -115,6 +115,7 @@ interface {:class_name}Interface
     protected function getMagentoType($type) {
 
         $mageType = ['smallint'=>'int',
+        'int'=>'int',
         'varchar'=>'string',
         'text'=>'string',
         'decimal'=>'decimal',
