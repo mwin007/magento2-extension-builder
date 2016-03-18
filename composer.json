@@ -1,0 +1,22 @@
+{
+    "name": "vpietri/adm-devbuilder",
+    "description": "DevBuilder is a extension for magento 2 developers",
+    "type": "magento2-module",
+    "version": "0.1.0",
+    "minimum-stability": "beta",
+    "authors": [
+        {
+            "name": "Vincent Pietri",
+            "homepage": "http://www.vincent-pietri.fr/",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "ADM\\DevBuilder\\": ""
+        }
+    }
+}
