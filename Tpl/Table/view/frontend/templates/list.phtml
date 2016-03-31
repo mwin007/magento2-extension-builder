@@ -1,0 +1,12 @@
+<h1><?php echo __('List') ?></h1>
+<ul class="{:class_name_lower_dash}-list">
+<?php foreach ($block->get{:class_name_upper_camel}s() as ${:class_name_lower}): ?>
+    <li class="item">
+    <a href="<?php echo $block->getUrl('*/view/index', ['id'=>${:class_name_lower}->get{:table_primary_key_upper_camel}()]) ?>">View</a>
+    {:LOOP_COLS
+        <div class="{:column_name_lower_dash}">
+            <?php echo ${:class_name_lower}->get{:column_name_camel}(); ?>
+        </div>LOOP_COLS}
+    </li>
+<?php endforeach; ?>
+</ul>

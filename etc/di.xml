@@ -3,8 +3,7 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="builder_interface_command" xsi:type="object">ADM\DevBuilder\Console\Command\Api\Data\InterfaceCommand</item>
-                <item name="builder_schema_command" xsi:type="object">ADM\DevBuilder\Console\Command\Setup\SchemaCommand</item>
+                <item name="builder_command" xsi:type="object">ADM\DevBuilder\Console\Command\BuilderCommand</item>
             </argument>
         </arguments>
     </type>

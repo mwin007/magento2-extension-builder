@@ -3,7 +3,7 @@ Developer Builder for Magento2
 
 # About
 
-This module add commands to the bin/magento utility in order to easily create specific classes
+This module add command to the bin/magento utility in order to generate files for a functional module.
 This use database of magento database
 
 This extension is based on the [Magento 2 module from scratch tutorial](https://github.com/ashsmith/magento2-blog-module-tutorial) from [Ash Smith](https://www.ashsmith.io)
@@ -11,113 +11,54 @@ This extension is based on the [Magento 2 module from scratch tutorial](https://
 
 # Use
 
-First, you have to create the table in database for your module, then the commands will use a sql describe to generate classes
+First, you have to create the table in database for your module, then the commands will use a sql describe to generate classes, templates and xml.
 
 
 ## InstallSchema Class
 
 ```
-php bin/magento dev:builder:schema admin_user Magento\\User
+php bin/magento dev:builder
 ```
 
-will generate the InstallSchema class for the Magento_User module
-
-```php
-use Magento\User\Setup
-
-use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
-
-class InstallSchema implements InstallSchemaInterface
-{
-    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
-    {
-        $installer = $setup;
-
-        $installer->startSetup();
-        /**
-         * Create table 'admin_user'
-         */
-        $table = $installer->getConnection()
-        ->newTable($installer->getTable('admin_user'))
-        ->addColumn(
-                'user_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['identity' => true, 'primary' => true, 'unsigned' => true, 'nullable' => false],
-                'user_id'
-        )
-        ->addColumn(
-                'firstname',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                32,
-                [],
-                'firstname'
-        )
-
-...
+Follow the wizzard
+```
+Enter the name of the master table (already created in database): ashsmith_blog_post_copy
+Enter the name of the module table (will be created by the module, default: ashsmith_blog_post_copy): ashsmith_blog_post     
+Enter the main classname in lower case with underscore (default: ashsmith_blog_post): post
+Enter the namespace of the module. (default: YourCompany\YourModule): Ashsmith\Blog
+Enter the routename of the module. (default: ashsmithblog): blog
 ```
 
-## Interface Class
-
+Let's go
 ```
-php bin/magento dev:builder:interface admin_user Magento\\User
+Building module files
+-- Ashsmith/Blog/Api/Data/PostInterface.php
+-- Ashsmith/Blog/Block/PostList.php
+-- Ashsmith/Blog/Block/PostView.php
+-- Ashsmith/Blog/Controller/Index/Index.php
+-- Ashsmith/Blog/Controller/View/Index.php
+-- Ashsmith/Blog/Helper/Post.php
+-- Ashsmith/Blog/Model/ResourceModel/Post.php
+-- Ashsmith/Blog/Model/ResourceModel/Post/Collection.php
+-- Ashsmith/Blog/Model/Post.php
+-- Ashsmith/Blog/Setup/SchemaCommand.php
+-- Ashsmith/Blog/composer.json
+-- Ashsmith/Blog/etc/frontend/routes.xml
+-- Ashsmith/Blog/etc/module.xml
+-- Ashsmith/Blog/registration.php
+-- Ashsmith/Blog/view/frontend/layout/blog_index_index.xml
+-- Ashsmith/Blog/view/frontend/layout/blog_view_index.xml
+-- Ashsmith/Blog/view/frontend/templates/list.phtml
+-- Ashsmith/Blog/view/frontend/templates/view.phtml
+ ------------
+In order to test your new module you have to:
+1. copy module folder from var/tmp to app/code
+2. run "bin/magento setup:upgrade" from the Magento root directory
+3. check install visiting the url /blog
 ```
 
-will generate the Interface class for the Magento_User module
-
-
-```php
-use Magento\User\Api\Data
-
-interface AdminUserInterface
-{
-    /**
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
-        
-    const USER_ID             = 'user_id';
-    const FIRSTNAME           = 'firstname';
-    const LASTNAME            = 'lastname';
-    const EMAIL               = 'email';
-    const USERNAME            = 'username';
-    const PASSWORD            = 'password';
-    const CREATED             = 'created';
-    const MODIFIED            = 'modified';
-    const LOGDATE             = 'logdate';
-    const LOGNUM              = 'lognum';
-    const RELOAD_ACL_FLAG     = 'reload_acl_flag';
-    const IS_ACTIVE           = 'is_active';
-    const EXTRA               = 'extra';
-    const RP_TOKEN            = 'rp_token';
-    const RP_TOKEN_CREATED_AT = 'rp_token_created_at';
-    const INTERFACE_LOCALE    = 'interface_locale';
-    const FAILURES_NUM        = 'failures_num';
-    const FIRST_FAILURE       = 'first_failure';
-    const LOCK_EXPIRES        = 'lock_expires';
-
-    /**
-     * Get user_id
-     *
-     * @return int|null
-     */
-    public function getUserId();
-
-
-    /**
-     * Set user_id
-     *
-     * @param int $user_id
-     * @return Magento\User\Api\Data\AdminUserInterface
-     */
-    public function setUserId($user_id);
-
-        
-
-...
-```
+That'all. Your module should be working
 
 ## Next
 
-Other classes will come soon
+Admin screens

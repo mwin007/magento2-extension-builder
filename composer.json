@@ -1,8 +1,8 @@
 {
     "name": "vpietri/adm-devbuilder",
-    "description": "DevBuilder is a extension for magento 2 developers",
+    "description": "DevBuilder is a extension to generate magento 2 module",
     "type": "magento2-module",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "minimum-stability": "beta",
     "authors": [
         {

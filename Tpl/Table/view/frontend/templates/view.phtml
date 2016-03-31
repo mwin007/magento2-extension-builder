@@ -1,0 +1,10 @@
+<?php
+${:class_name_lower} = $block->get{:class_name_upper_camel}();
+?>
+<h1><?php echo __('View') ?></h1>
+<div class="{:class_name_lower_dash}-view">
+{:LOOP_COLS
+    <div class="{:column_name_lower_dash}">
+        <?php echo ${:class_name_lower}->get{:column_name_camel}(); ?>
+    </div>LOOP_COLS}
+</div>
