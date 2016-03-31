@@ -3,8 +3,11 @@ Developer Builder for Magento2
 
 # About
 
-This module add command to the bin/magento utility in order to generate files for a functional module.
-This use database of magento database
+This module add commands to the bin/magento utility in order to generate files for a functional module.
+
+Make a functional module in double-quick time:
+* create table in database
+* launch magento command line
 
 This extension is based on the [Magento 2 module from scratch tutorial](https://github.com/ashsmith/magento2-blog-module-tutorial) from [Ash Smith](https://www.ashsmith.io)
 
