@@ -56,7 +56,7 @@ class BuilderCommand extends Command
     {
         $questionHelper = new QuestionHelper();
 
-        $question = new Question('Enter the name of the master table (already created in database): ', 'adm_pointofsale');
+        $question = new Question('Enter the name of the master table (already created in database): ');
         $mastertable = $questionHelper->ask($input, $output, $question);
 
         $question = new Question('Enter the name of the module table (will be created by the module, default: '.$mastertable.'): ', $mastertable);
@@ -86,4 +86,40 @@ class BuilderCommand extends Command
             return;
         }
     }
+
+    protected function executeTest(InputInterface $input, OutputInterface $output)
+    {
+        $questionHelper = new QuestionHelper();
+
+        $question = new Question('Enter the name of the master table (already created in database): ', 'ashsmith_blog_post_copy');
+        $mastertable = $questionHelper->ask($input, $output, $question);
+
+        $question = new Question('Enter the name of the module table (will be created by the module, default: '.$mastertable.'): ', 'ashsmith_blog_post');
+        $table = $questionHelper->ask($input, $output, $question);
+
+        $question = new Question('Enter the main classname in lower case with underscore (default: '.strtolower($table).'): ', 'post');
+        $classname = $questionHelper->ask($input, $output, $question);
+
+        $question = new Question('Enter the namespace of the module. (default: YourCompany\YourModule): ', 'Ashsmith\Blog');
+        $namespace = $questionHelper->ask($input, $output, $question);
+
+        $defaultRoutename = $this->_helper->getDefaultRoutename($namespace);
+        $question = new Question('Enter the routename of the module. (default: '.$defaultRoutename.'): ', 'blog');
+        $routename = $questionHelper->ask($input, $output, $question);
+
+        $classFull = $this->_helper->getTemplate($mastertable, $table, $classname, $namespace, $routename);
+
+        if (!empty($classFull)) {
+            $output->writeln(self::LINE_SEP);
+            $output->writeln('Building module files');
+            $output->writeln($classFull);
+            $output->writeln(self::LINE_SEP);
+            $output->writeln('In order to test your new module you have to:');
+            $output->writeln('1. copy module folder from var/tmp to app/code');
+            $output->writeln('2. run "bin/magento setup:upgrade" from the Magento root directory');
+            $output->writeln('3. check install visiting the url /' . $routename);
+            return;
+        }
+    }
+
 }

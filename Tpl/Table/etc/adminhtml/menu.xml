@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="{:module_name}::{:route_name}_content" title="{:module_name_title}" module="{:module_name}" sortOrder="50" parent="Magento_Backend::content" resource="{:module_name}::{:route_name}_content" />
+        <add id="{:module_name}::{:class_name_lower}" title="{:class_name_upper_camel}" module="{:module_name}" sortOrder="0" parent="{:module_name}::{:route_name}_content" action="{:route_name}/{:class_name_lower}" resource="{:module_name}::{:class_name_lower}"/>
+    </menu>
+</config>

@@ -57,6 +57,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $replaceCommon = ['table_name'=>$table,
             'class_name_upper_camel'=>SimpleDataObjectConverter::snakeCaseToUpperCamelCase($classname),
+            'class_name_upper'=>strtoupper($classname),
             'class_name_camel'=>SimpleDataObjectConverter::snakeCaseToCamelCase($classname),
             'class_name_lower'=>strtolower($classname),
             'class_name_lower_dash'=>str_replace('_', '-', strtolower($classname)),
@@ -64,9 +65,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'prefix'=>strtolower($routename.'_'.$classname),
             'namespace'=> $namespace,
             'module_name'=>str_replace('\\', '_', $namespace),
+            'module_name_lower'=>strtolower(str_replace('\\', '_', $namespace)),
+            'module_name_title'=>ucwords(str_replace('\\', ' ', $namespace)),
             'composer_name'=>str_replace('\\', '\\\\', $namespace),
             'repo_name'=>str_replace('\\', '-', $namespace),
-            'module_name_lower'=>strtolower(str_replace('\\', '_', $namespace)),
             'route_name'=>$routename
         ];
 
@@ -77,10 +79,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 'column_name_camel'=>SimpleDataObjectConverter::snakeCaseToUpperCamelCase($column),
                 'column_name_upper'=>strtoupper($column),
                 'column_name_lower_dash'=>str_replace('_', '-', strtolower($column)),
+                'column_name_title'=>ucwords(str_replace('_', ' ', $column)),
                 'column_type'=>self::getMagentoType($row['DATA_TYPE']),
                 'column_dbtype'=>$this->getColumnType($row['DATA_TYPE']),
                 'column_length'=>$this->getColumnLength($row),
-                'column_constraints'=>$this->getColumnConstraints($row)
+                'column_constraints'=>$this->getColumnConstraints($row),
+                'column_is_required'=>$this->getColumnIsRequired($row)
             ];
             if($this->getColumnIsPrimary($row)) {
                 $replaceCommon['table_primary_key'] = $column;
@@ -109,6 +113,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
                 $tplContent = $this->getSearchReplaceLoop($tplContent, $replaceCol);
 
+                $tplContent = $this->getSearchReplaceLoopType($tplContent, $replaceCol);
+
                 $tplContent = $this->getSearchReplaceContent($tplContent, $replaceCommon);
 
                 $tplDestPath = $this->getSearchReplaceFilePath(str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . str_replace($dirTpl, '', $path), $replaceCommon);
@@ -126,27 +132,44 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $classFull;
     }
 
-
     protected function getSearchReplaceLoop($search, $replaceCol)
     {
         $replacedSearch = $search;
         if(preg_match_all('/\{:LOOP_COLS([\S+\n\r\s]+?)LOOP_COLS\}/', $search, $match)) {
-
-            foreach (array_unique($match[1]) as $searchTerm) {
+            foreach ($match[1] as $matchKey=>$searchTerm) {
                 $replaceAllCols = [];
                 foreach ($replaceCol as $replace) {
                     $replaceAllCols[] = $this->getSearchReplaceContent($searchTerm, $replace);
                 }
-                $replacedSearch = str_replace('{:LOOP_COLS'.$searchTerm.'LOOP_COLS}', implode($replaceAllCols), $replacedSearch);
+                $replacedSearch = str_replace($match[0][$matchKey], implode($replaceAllCols), $replacedSearch);
             }
         }
         return $replacedSearch;
 
     }
 
+    protected function getSearchReplaceLoopType($search, $replaceCol)
+    {
+        $replacedSearch = $search;
+        if(preg_match_all('/\{:LOOP_COLS:(\w+):(\w+)([\S+\n\r\s]+?)LOOP_COLS:TYPE\}/', $search, $match)) {
+            foreach ($match[3] as $matchKey=>$searchTerm) {
+                $replaceAllCols = [];
+                foreach ($replaceCol as $replace) {
+                    if(isset($replace[$match[1][$matchKey]]) and $replace[$match[1][$matchKey]]==$match[2][$matchKey]) {
+                        $replaceAllCols[] = $this->getSearchReplaceContent($searchTerm, $replace);
+                    }
+                }
+                $replacedSearch = str_replace($match[0][$matchKey], implode($replaceAllCols), $replacedSearch);
+            }
+        }
+        return $replacedSearch;
+
+    }
+
+
     protected function getSearchReplaceFilePath($search, $replace)
     {
-        return $this->getSearchReplace($search, $replace,'/__(\w+?)__/');
+        return $this->getSearchReplace($search, $replace,'/__([a-zA-Z]\w+?[a-zA-Z])__/');
     }
 
     protected function getSearchReplaceContent($search, $replace)
@@ -245,6 +268,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         return implode(', ', $constraints);
     }
+
+    protected function getColumnIsRequired($row) {
+        return empty($row['NULLABLE']) ? 'true' : 'false';
+    }
+
 
     protected function getColumnIsPrimary($row) {
         return (!empty($row['PRIMARY']));

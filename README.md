@@ -36,19 +36,34 @@ Let's go
 ```
 Building module files
 -- Ashsmith/Blog/Api/Data/PostInterface.php
+-- Ashsmith/Blog/Block/Adminhtml/Post/Edit.php
+-- Ashsmith/Blog/Block/Adminhtml/Post/Edit/Form.php
 -- Ashsmith/Blog/Block/PostList.php
 -- Ashsmith/Blog/Block/PostView.php
+-- Ashsmith/Blog/Controller/Adminhtml/Post/Delete.php
+-- Ashsmith/Blog/Controller/Adminhtml/Post/Edit.php
+-- Ashsmith/Blog/Controller/Adminhtml/Post/Index.php
+-- Ashsmith/Blog/Controller/Adminhtml/Post/NewAction.php
+-- Ashsmith/Blog/Controller/Adminhtml/Post/Save.php
 -- Ashsmith/Blog/Controller/Index/Index.php
 -- Ashsmith/Blog/Controller/View/Index.php
 -- Ashsmith/Blog/Helper/Post.php
 -- Ashsmith/Blog/Model/ResourceModel/Post.php
 -- Ashsmith/Blog/Model/ResourceModel/Post/Collection.php
 -- Ashsmith/Blog/Model/Post.php
--- Ashsmith/Blog/Setup/SchemaCommand.php
+-- Ashsmith/Blog/Setup/InstallSchema.php
+-- Ashsmith/Blog/Ui/Component/Listing/Column/PostActions.php
 -- Ashsmith/Blog/composer.json
+-- Ashsmith/Blog/etc/acl.xml
+-- Ashsmith/Blog/etc/adminhtml/menu.xml
+-- Ashsmith/Blog/etc/adminhtml/routes.xml
+-- Ashsmith/Blog/etc/di.xml
 -- Ashsmith/Blog/etc/frontend/routes.xml
 -- Ashsmith/Blog/etc/module.xml
 -- Ashsmith/Blog/registration.php
+-- Ashsmith/Blog/view/adminhtml/layout/blog_post_edit.xml
+-- Ashsmith/Blog/view/adminhtml/layout/blog_post_index.xml
+-- Ashsmith/Blog/view/adminhtml/ui_component/blog_post_listing.xml
 -- Ashsmith/Blog/view/frontend/layout/blog_index_index.xml
 -- Ashsmith/Blog/view/frontend/layout/blog_view_index.xml
 -- Ashsmith/Blog/view/frontend/templates/list.phtml
@@ -64,4 +79,4 @@ That'all. Your module should be working
 
 ## Next
 
-Admin screens
+

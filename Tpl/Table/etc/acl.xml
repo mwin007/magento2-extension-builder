@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::content">
+                    <resource id="{:module_name}::{:route_name}_content" title="{:module_name_title}" sortOrder="10" >
+                        <resource id="{:module_name}::{:class_name_lower}" title="{:module_name_title} {:class_name_upper_camel}s" sortOrder="40">
+                            <resource id="{:module_name}::save" title="Save {:module_name_title} {:class_name_upper_camel}" sortOrder="10" />
+                            <resource id="{:module_name}::{:class_name_lower}_delete" title="Delete {:module_name_title} {:class_name_upper_camel}" sortOrder="20" />
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
