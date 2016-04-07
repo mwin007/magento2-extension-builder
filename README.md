@@ -79,4 +79,17 @@ That'all. Your module should be working
 
 ## Next
 
+# Changelog
 
+0.2.2
+* Add pager on frontend list
+
+0.2.1
+* Add adminhtml
+
+0.2.0
+* Change command line
+* Add full functional module frontend files
+
+0.1.0
+*  module initialization 

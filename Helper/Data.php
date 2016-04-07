@@ -228,7 +228,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $size = "'64k'";
                 break;
             case 'decimal':
-                $size = $row['PRECISION'].','.$row['SCALE'];
+                $size = "'".$row['PRECISION'].','.$row['SCALE']."'";
                 break;
             default:
                 $size = is_null($row['LENGTH']) ? 'null' : $row['LENGTH'];

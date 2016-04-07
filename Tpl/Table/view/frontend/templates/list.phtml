@@ -1,12 +1,35 @@
-<h1><?php echo __('List') ?></h1>
-<ul class="{:class_name_lower_dash}-list">
-<?php foreach ($block->get{:class_name_upper_camel}s() as ${:class_name_lower}): ?>
-    <li class="item">
-    <a href="<?php echo $block->getUrl('*/view/index', ['id'=>${:class_name_lower}->get{:table_primary_key_upper_camel}()]) ?>">View</a>
-    {:LOOP_COLS
-        <div class="{:column_name_lower_dash}">
-            <?php echo ${:class_name_lower}->get{:column_name_camel}(); ?>
-        </div>LOOP_COLS}
-    </li>
-<?php endforeach; ?>
-</ul>
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_{:class_name_lower}s = $block->get{:class_name_upper_camel}s(); ?>
+<?php if ($_{:class_name_lower}s && count($_{:class_name_lower}s)): ?>
+    <div class="table-wrapper {:class_name_lower_dash}">
+        <table class="data table {:class_name_lower_dash}-list" id="{:class_name_lower_dash}-table">
+            <caption class="table-caption"><?php echo __('Grid Record') ?></caption>
+            <thead>
+                <tr>
+                    {:LOOP_COLS:column_dbtype:TYPE_TEXT
+                    <th scope="col" class="col {:column_name_lower_dash}"><?php echo __('{:column_name_title}') ?></th>LOOP_COLS:TYPE}
+                    <th scope="col" class="col {:class_name_lower_dash}-action">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_{:class_name_lower}s as ${:class_name_lower}): ?>
+                <tr>
+                    {:LOOP_COLS:column_dbtype:TYPE_TEXT
+                    <td data-th="<?php echo $block->escapeHtml(__('{:column_name_title}')) ?>" class="col {:column_name_lower_dash}"><?php echo ${:class_name_lower}->get{:column_name_camel}(); ?></td>LOOP_COLS:TYPE}
+                    <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col {:class_name_lower_dash}-action"><a href="<?php echo $block->getViewUrl(${:class_name_lower}); ?>">View</a></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="{:class_name_lower_dash}-toolbar toolbar bottom"><?php echo $block->getPagerHtml();?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('No {:module_name_title} found.'); ?></span></div>
+<?php endif ?>
+
