@@ -1,9 +1,9 @@
 <?php
-namespace {:namespace}\Controller\View;
+namespace {:namespace}\Controller\{:class_name_upper_camel};
 
 use \Magento\Framework\App\Action\Action;
 
-class Index extends Action
+class View extends Action
 {
     /** @var  \Magento\Framework\Controller\Result\ForwardFactory */
     protected $resultForwardFactory;

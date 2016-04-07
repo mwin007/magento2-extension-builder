@@ -1,8 +1,8 @@
 <?php
-namespace {:namespace}\Block;
+namespace {:namespace}\Block\{:class_name_upper_camel};
 
 
-class {:class_name_upper_camel}View extends \Magento\Framework\View\Element\Template implements
+class View extends \Magento\Framework\View\Element\Template implements
     \Magento\Framework\DataObject\IdentityInterface
 {
 

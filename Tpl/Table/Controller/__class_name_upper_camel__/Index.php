@@ -1,5 +1,5 @@
 <?php
-namespace {:namespace}\Controller\Index;
+namespace {:namespace}\Controller\{:class_name_upper_camel};
 
 use \Magento\Framework\App\Action\Action;
 

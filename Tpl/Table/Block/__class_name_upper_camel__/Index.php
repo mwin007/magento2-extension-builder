@@ -1,12 +1,12 @@
 <?php
-namespace {:namespace}\Block;
+namespace {:namespace}\Block\{:class_name_upper_camel};
 
 
 use {:namespace}\Api\Data\{:class_name_upper_camel}Interface;
 use {:namespace}\Model\ResourceModel\{:class_name_upper_camel}\Collection as {:class_name_upper_camel}Collection;
 
 
-class {:class_name_upper_camel}List extends \Magento\Framework\View\Element\Template implements
+class Index extends \Magento\Framework\View\Element\Template implements
 \Magento\Framework\DataObject\IdentityInterface
 {
     /**
@@ -78,7 +78,7 @@ class {:class_name_upper_camel}List extends \Magento\Framework\View\Element\Temp
      */
     public function getViewUrl(${:class_name_lower})
     {
-        return $this->getUrl('*/view/index', ['id'=>${:class_name_lower}->get{:table_primary_key_upper_camel}()]);
+        return $this->getUrl('{:route_name}/{:class_name_lower}/view', ['id'=>${:class_name_lower}->get{:table_primary_key_upper_camel}()]);
     }
 
     /**
