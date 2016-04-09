@@ -16,9 +16,6 @@ This extension is based on the [Magento 2 module from scratch tutorial](https://
 
 First, you have to create the table in database for your module, then the commands will use a sql describe to generate classes, templates and xml.
 
-
-## InstallSchema Class
-
 ```
 php bin/magento dev:builder
 ```
@@ -77,8 +74,6 @@ In order to test your new module you have to:
 ```
 
 That'all. Your module should be working
-
-## Next
 
 # Changelog
 
