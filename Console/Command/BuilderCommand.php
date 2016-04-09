@@ -57,58 +57,27 @@ class BuilderCommand extends Command
         $questionHelper = new QuestionHelper();
 
         $question = new Question('Enter the name of the master table (already created in database): ');
-        $mastertable = $questionHelper->ask($input, $output, $question);
+        $this->_helper->setInputParam('mastertable', $questionHelper->ask($input, $output, $question));
 
-        $question = new Question('Enter the name of the module table (will be created by the module, default: '.$mastertable.'): ', $mastertable);
-        $table = $questionHelper->ask($input, $output, $question);
+        $question = new Question('Enter the name of the module table (will be created by the module, default: '.$this->_helper->getInputParam('mastertable').'): ', $this->_helper->getInputParam('mastertable'));
+        $this->_helper->setInputParam('table', $questionHelper->ask($input, $output, $question));
 
-        $question = new Question('Enter the main classname in lower case with underscore (default: '.strtolower($table).'): ', strtolower($table));
-        $classname = $questionHelper->ask($input, $output, $question);
+        $question = new Question('Enter the main classname in lower case with underscore (default: '.$this->_helper->getInputParam('table').'): ', $this->_helper->getInputParam('table'));
+        $this->_helper->setInputParam('class_name', $questionHelper->ask($input, $output, $question));
 
-        $question = new Question('Enter the namespace of the module. (default: YourCompany\YourModule): ', 'YourCompany\YourModule');
-        $namespace = $questionHelper->ask($input, $output, $question);
+        $question = new Question('Enter the namespace of the module. (default: '.$this->_helper->getInputParam('namespace', 'YourCompany\YourModule').'): ', $this->_helper->getInputParam('namespace', 'YourCompany\YourModule'));
+        $this->_helper->setInputParam('namespace', $questionHelper->ask($input, $output, $question));
 
-        $defaultRoutename = $this->_helper->getDefaultRoutename($namespace);
-        $question = new Question('Enter the routename of the module. (default: '.$defaultRoutename.'): ', $defaultRoutename);
-        $routename = $questionHelper->ask($input, $output, $question);
+        $question = new Question('Enter the routename of the module. (default: '.$this->_helper->getInputParamFormat('namespace', 'lower_alpha').'): ', $this->_helper->getInputParamFormat('namespace', 'lower_alpha'));
+        $this->_helper->setInputParam('route_name', $questionHelper->ask($input, $output, $question));
 
-        $classFull = $this->_helper->getTemplate($mastertable, $table, $classname, $namespace, $routename);
+        $classFull = $this->_helper->getTemplate();
 
-        if (!empty($classFull)) {
-            $output->writeln(self::LINE_SEP);
-            $output->writeln('Building module files');
-            $output->writeln($classFull);
-            $output->writeln(self::LINE_SEP);
-            $output->writeln('In order to test your new module you have to:');
-            $output->writeln('1. copy module folder from var/tmp to app/code');
-            $output->writeln('2. run "bin/magento setup:upgrade" from the Magento root directory');
-            $output->writeln('3. check install visiting the url /' . $routename);
-            return;
-        }
+        return $this->displayOutput($output, $classFull);
     }
 
-    protected function executeTest(InputInterface $input, OutputInterface $output)
+    protected function displayOutput(OutputInterface $output, $classFull)
     {
-        $questionHelper = new QuestionHelper();
-
-        $question = new Question('Enter the name of the master table (already created in database): ', 'ashsmith_blog_post_copy');
-        $mastertable = $questionHelper->ask($input, $output, $question);
-
-        $question = new Question('Enter the name of the module table (will be created by the module, default: '.$mastertable.'): ', 'ashsmith_blog_post');
-        $table = $questionHelper->ask($input, $output, $question);
-
-        $question = new Question('Enter the main classname in lower case with underscore (default: '.strtolower($table).'): ', 'post');
-        $classname = $questionHelper->ask($input, $output, $question);
-
-        $question = new Question('Enter the namespace of the module. (default: YourCompany\YourModule): ', 'Ashsmith\Blog');
-        $namespace = $questionHelper->ask($input, $output, $question);
-
-        $defaultRoutename = $this->_helper->getDefaultRoutename($namespace);
-        $question = new Question('Enter the routename of the module. (default: '.$defaultRoutename.'): ', 'blog');
-        $routename = $questionHelper->ask($input, $output, $question);
-
-        $classFull = $this->_helper->getTemplate($mastertable, $table, $classname, $namespace, $routename);
-
         if (!empty($classFull)) {
             $output->writeln(self::LINE_SEP);
             $output->writeln('Building module files');
@@ -117,9 +86,8 @@ class BuilderCommand extends Command
             $output->writeln('In order to test your new module you have to:');
             $output->writeln('1. copy module folder from var/tmp to app/code');
             $output->writeln('2. run "bin/magento setup:upgrade" from the Magento root directory');
-            $output->writeln('3. check install visiting the url /' . $routename);
+            $output->writeln('3. check install visiting the url /' . $this->_helper->getInputParam('route_name') . '/' . $this->_helper->getInputParamFormat('class_name', 'lower'));
             return;
         }
     }
-
 }

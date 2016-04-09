@@ -83,6 +83,7 @@ That'all. Your module should be working
 
 0.2.2
 * Add pager on frontend list
+* Class renaming to fit coding standards
 
 0.2.1
 * Add adminhtml

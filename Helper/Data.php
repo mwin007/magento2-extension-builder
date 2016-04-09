@@ -26,6 +26,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected $_componentRegistrar;
 
+    protected $_input = array();
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
@@ -43,17 +45,96 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct($context);
     }
 
-    public function getDefaultRoutename($namespace)
+    public function setInputParam($key, $value)
     {
-        return strtolower(str_replace('\\', '', $namespace));
+        $this->_input[$key] = $value;
+    }
+
+    public function setInputParams($params)
+    {
+        $this->_input = array_merge($this->_input, $params);
+    }
+
+    public function getInputParam($key, $default='')
+    {
+        return isset($this->_input[$key]) ? $this->_input[$key] : $default;
+    }
+
+    public function getInputParamFormat($key, $format, $default='')
+    {
+        return $this->_getInputToFormat(isset($this->_input[$key]) ? $this->_input[$key] : $default, $format);
+    }
+
+    protected function _checkInputParams($key=false)
+    {
+        if(empty($this->_input['mastertable'])) {
+            return false;
+        }
+        if(!$key and empty($this->_input['table'])) {
+            $this->_input['table'] = $this->_input['mastertable'];
+        }
+        if(!$key and empty($this->_input['class_name'])) {
+            $this->_input['class_name'] = $this->_input['table'];
+        }
+        if(!$key and empty($this->_input['namespace'])) {
+            $this->_input['namespace'] = 'YourCompany\YourModule';
+        }
+        if(!$key and empty($this->_input['route_name'])) {
+            $this->_input['route_name'] = str_replace('\\', '', $this->_input['namespace']);
+        }
+        if(!$key) {
+            $this->_input['table'] = strtolower($this->_input['table']);
+            $this->_input['class_name'] = strtolower($this->_input['class_name']);
+            $this->_input['route_name'] = strtolower($this->_input['route_name']);
+        }
+    }
+
+    protected function _getInputToFormat($input, $format)
+    {
+        switch ($format) {
+            case 'upper_camel':
+                $inputFormat = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($input);
+                break;
+            case 'camel':
+                $inputFormat = SimpleDataObjectConverter::snakeCaseToCamelCase($input);
+                break;
+            case 'upper':
+                $inputFormat = strtoupper($input);
+                break;
+            case 'lower':
+                $inputFormat = strtolower($input);
+                break;
+            case 'lower_dash':
+                $inputFormat = str_replace('_', '-', strtolower($input));
+                break;
+            case 'lower_alpha':
+                $inputFormat = strtolower(preg_replace('/[^A-Za-z]/', '', $input));
+                break;
+            case 'title':
+                $inputFormat = ucwords(preg_replace('/[^A-Za-z]/', '', $input));
+                break;
+            default:
+                break;
+        }
+
+        return $inputFormat;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getTemplate($mastertable, $table, $classname, $namespace, $routename, $print=false)
+    public function getTemplate($print=false)
     {
         $writeMode = 'w';
+        if($this->_checkInputParams()) {
+            return false;
+        }
+
+        $mastertable = $this->getInputParam('mastertable');
+        $table = $this->getInputParam('table');
+        $classname = $this->getInputParam('class_name');
+        $namespace = $this->getInputParam('namespace');
+        $routename = $this->getInputParam('route_name');
 
         $replaceCommon = ['table_name'=>$table,
             'class_name_upper_camel'=>SimpleDataObjectConverter::snakeCaseToUpperCamelCase($classname),
